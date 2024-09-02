@@ -16,12 +16,9 @@ class MoviedbDatasource extends MoviesDatasource {
     ),
   );
 
-  @override
-  Future<List<Movie>> getNowPlaying({int page = 1}) async {
-    final response =
-        await dio.get('/movie/now_playing'); //Usa dio para hacer la peticion
-
-    final moviesDBResponse = MovieDbResponse.fromJson(response.data);
+  //Con esto evitamos hacer muchas veces la peticion para todas las movies
+  List<Movie> _jsonToMovies(Map<String, dynamic> json) {
+    final moviesDBResponse = MovieDbResponse.fromJson(json);
     //Convierte los datos de la peticion en el modelo(models)
     // que usamos para darle la forma
     //que nosotros deseamos
@@ -36,5 +33,59 @@ class MoviedbDatasource extends MoviesDatasource {
     //crear la lista que necesitamos
     //
     return movies;
+  }
+
+  //
+
+  @override
+  Future<List<Movie>> getNowPlaying({int page = 1}) async {
+    final response = await dio.get(
+      '/movie/now_playing',
+      queryParameters: {
+        'page': page,
+      },
+    ); //Usa dio para hacer la peticion
+
+    return _jsonToMovies(response.data);
+  }
+
+  @override
+  Future<List<Movie>> getPopular({int page = 1}) async {
+    final response = await dio.get(
+      '/movie/popular',
+      queryParameters: {
+        'page': page,
+      },
+    ); //Usa dio para hacer la peticion
+
+    return _jsonToMovies(response.data);
+  }
+
+  // TOPRATED
+
+  @override
+  Future<List<Movie>> getTopRated({int page = 1}) async {
+    final response = await dio.get(
+      '/movie/top_rated',
+      queryParameters: {
+        'page': page,
+      },
+    ); //Usa dio para hacer la peticion
+
+    return _jsonToMovies(response.data);
+  }
+
+  //UPCOMING
+
+  @override
+  Future<List<Movie>> getUpcoming({int page = 1}) async {
+    final response = await dio.get(
+      '/movie/upcoming',
+      queryParameters: {
+        'page': page,
+      },
+    ); //Usa dio para hacer la peticion
+
+    return _jsonToMovies(response.data);
   }
 }

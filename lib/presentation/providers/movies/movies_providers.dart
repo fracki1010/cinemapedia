@@ -15,6 +15,48 @@ final nowPlayingMoviesProvider =
   },
 );
 
+//
+
+//
+
+final popularMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>(
+  //LA CLASE QUE CONTROLA O NOTIFICA ES "MoviesNotifier" y la data o state es "List<Movie>"
+  (ref) {
+    final fetchMoreMovies = ref.watch(movieRepositoryProvider).getPopular;
+
+    return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+  },
+);
+
+//
+
+//
+
+final topRatedMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>(
+  //LA CLASE QUE CONTROLA O NOTIFICA ES "MoviesNotifier" y la data o state es "List<Movie>"
+  (ref) {
+    final fetchMoreMovies = ref.watch(movieRepositoryProvider).getTopRated;
+
+    return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+  },
+);
+
+//
+
+//
+
+final upcomingMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>(
+  //LA CLASE QUE CONTROLA O NOTIFICA ES "MoviesNotifier" y la data o state es "List<Movie>"
+  (ref) {
+    final fetchMoreMovies = ref.watch(movieRepositoryProvider).getUpcoming;
+
+    return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+  },
+);
+
 //El StateNotiferProvider
 // es  un "proveedor de informacion que notifica el estado cuando cambia el estado"
 //
@@ -28,6 +70,7 @@ typedef MovieCallBack = Future<List<Movie>> Function({int page});
 //osea que voy a mantener un estado de MOVIE
 class MoviesNotifier extends StateNotifier<List<Movie>> {
   int currentPage = 0;
+  bool isLoading = false;
   MovieCallBack fetchMoreMovies;
 
   MoviesNotifier({
@@ -35,9 +78,16 @@ class MoviesNotifier extends StateNotifier<List<Movie>> {
   }) : super([]);
 
   Future<void> loadNextPage() async {
+    if (isLoading) return;
+
+    isLoading = true;
+
     currentPage++;
 
     final List<Movie> movies = await fetchMoreMovies(page: currentPage);
     state = [...state, ...movies];
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    isLoading = false;
   }
 }

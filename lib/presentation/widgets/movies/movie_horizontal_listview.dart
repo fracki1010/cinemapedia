@@ -1,9 +1,10 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
+import '../../../config/helpers/human_formats.dart';
 import '../../../domain/entities/movie.dart';
 
-class MovieHorizontalListview extends StatelessWidget {
+class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
   final String? title;
   final String? subTitle;
@@ -18,23 +19,52 @@ class MovieHorizontalListview extends StatelessWidget {
   });
 
   @override
+  State<MovieHorizontalListview> createState() =>
+      _MovieHorizontalListviewState();
+}
+
+class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    scrollController.addListener(() {
+      if (widget.loadNextPage == null) return;
+
+      if ((scrollController.position.pixels + 200) >=
+          scrollController.position.maxScrollExtent) {
+        widget.loadNextPage!();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 350,
+      height: 400,
       child: Column(
         children: [
-          if (title != null || subTitle != null)
-            _Title(title: title, subTitle: subTitle),
+          if (widget.title != null || widget.subTitle != null)
+            _Title(title: widget.title, subTitle: widget.subTitle),
           //
-
+          const SizedBox(height: 10),
           //
           Expanded(
             child: ListView.builder(
-              itemCount: movies.length,
+              controller: scrollController,
+              itemCount: widget.movies.length,
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
-                return _Slide(movie: movies[index]);
+                return _Slide(movie: widget.movies[index]);
               },
             ),
           )
@@ -112,14 +142,21 @@ class _Slide extends StatelessWidget {
               const SizedBox(width: 4),
               //
               Text(
-                '${movie.voteAverage}',
+                //Esto es para que se muestre un solo decimal
+                movie.voteAverage.toStringAsFixed(1),
                 style: textStyles.bodyMedium
                     ?.copyWith(color: Colors.yellow.shade800),
               ),
               //
-              const SizedBox(width: 4),
+              const SizedBox(width: 20),
               //
-              Text('${movie.popularity}', style: textStyles.bodySmall)
+
+              Text(
+                HumanFormats.number(movie.popularity),
+                style: textStyles.bodySmall,
+              )
+              //Text('${movie.popularity}', style: textStyles.bodySmall)
+              //Ahora le estoy aplicando el HumantFormat creado, para simplificar numeros
             ],
           )
         ],
