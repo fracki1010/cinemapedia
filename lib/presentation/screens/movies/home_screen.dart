@@ -40,6 +40,11 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final initialLoading = ref.watch(initialLoadingProvider);
+    if (initialLoading) return const FullScreenLoader();
+
+    //
+
     //Now Playing
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     //Popular
@@ -59,6 +64,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
           floating: true,
           flexibleSpace: FlexibleSpaceBar(
             title: CustomAppbar(),
+            centerTitle: true,
           ),
         ),
 

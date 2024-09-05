@@ -62,7 +62,6 @@ class MoviedbDatasource extends MoviesDatasource {
   }
 
   // TOPRATED
-
   @override
   Future<List<Movie>> getTopRated({int page = 1}) async {
     final response = await dio.get(
@@ -76,7 +75,6 @@ class MoviedbDatasource extends MoviesDatasource {
   }
 
   //UPCOMING
-
   @override
   Future<List<Movie>> getUpcoming({int page = 1}) async {
     final response = await dio.get(
