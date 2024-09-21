@@ -116,7 +116,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
           builder: (context, snapshot) {
             if (snapshot.data ?? false) {
               return SpinPerfect(
-                duration: const Duration(seconds: 20),
+                duration: const Duration(seconds: 1),
                 spins: 10,
                 infinite: true,
                 child: IconButton(
