@@ -109,6 +109,9 @@ class MoviedbDatasource extends MoviesDatasource {
   //Es para la busqueda con el search
   @override
   Future<List<Movie>> searchMovies(String query) async {
+    //Si el campo de busqueda queda vacio debuelve un arreglo vacio
+    if (query.isEmpty) return [];
+
     final response = await dio.get(
       '/search/movie',
       queryParameters: {
