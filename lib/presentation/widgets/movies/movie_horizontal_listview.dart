@@ -114,7 +114,11 @@ class _Slide extends StatelessWidget {
 
                   return GestureDetector(
                     //Con este widget se interactua con la img
-                    onTap: () => context.push('/movie/${movie.id}'),
+
+                    //cambiamos estoy para que la ruta acepte mantener el estado
+                    /*  onTap: () => context.push('/movie/${movie.id}'), */
+
+                    onTap: () => context.push('/home/0/movie/${movie.id}'),
                     child: FadeIn(child: child),
                   );
                 },
