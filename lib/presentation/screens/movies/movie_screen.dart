@@ -76,7 +76,7 @@ class _MovieDetails extends StatelessWidget {
       children: [
         //Imagen de la pelicula
         Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: Row(
             children: [
               ClipRRect(
