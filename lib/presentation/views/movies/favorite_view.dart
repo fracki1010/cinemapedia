@@ -12,7 +12,9 @@ class FavoriteView extends ConsumerStatefulWidget {
   FavoriteViewState createState() => FavoriteViewState();
 }
 
-class FavoriteViewState extends ConsumerState<FavoriteView> {
+//Le coloco un mixin para poder usar el PageView en HomeScreen
+class FavoriteViewState extends ConsumerState<FavoriteView>
+    with AutomaticKeepAliveClientMixin {
   //Todo esto es para hacer un infinite scroll
 
   bool isLastPage = false;
@@ -96,4 +98,7 @@ class FavoriteViewState extends ConsumerState<FavoriteView> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

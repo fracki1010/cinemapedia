@@ -11,7 +11,9 @@ class HomeView extends ConsumerStatefulWidget {
   HomeViewState createState() => HomeViewState();
 }
 
-class HomeViewState extends ConsumerState<HomeView> {
+//Le coloco este mixin para poder usar el PageView
+class HomeViewState extends ConsumerState<HomeView>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
@@ -110,4 +112,7 @@ class HomeViewState extends ConsumerState<HomeView> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

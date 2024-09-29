@@ -11,34 +11,26 @@ class PopularesView extends ConsumerStatefulWidget {
   PopularesViewState createState() => PopularesViewState();
 }
 
-class PopularesViewState extends ConsumerState<PopularesView> {
+//Le coloco un mixin para poder usar el PageView en HomeScreen
+class PopularesViewState extends ConsumerState<PopularesView>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
-    //Todo esto es para hacer un infinite scroll
-    bool isLoading = false;
-
-    void loadNextPage() {
-      if (isLoading) return;
-
-      isLoading = true;
-      ref.read(popularMoviesProvider.notifier).loadNextPage();
-      isLoading = false;
-    }
-
-    @override
-    void initState() {
-      super.initState();
-
-      loadNextPage();
-    }
-
     final popularMovies = ref.watch(popularMoviesProvider);
+
+    if (popularMovies.isEmpty) {
+      return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+    }
 
     return Scaffold(
       body: MovieMasonry(
         movies: popularMovies,
-        loadNextPage: loadNextPage,
+        loadNextPage: () =>
+            ref.read(popularMoviesProvider.notifier).loadNextPage(),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
