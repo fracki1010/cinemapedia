@@ -195,13 +195,29 @@ class _ActorsByMovie extends ConsumerWidget {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+//
+//Este es para saber si la pelicual esta en favoritos
+//y poder colocar el corazon en rojo o vacio
+
+//utilizo el family para usar un agumento y poder llevar el id de la movie
+final isFavoriteProvider =
+    FutureProvider.family.autoDispose((ref, int movieId) {
+  final localStorageRepository = ref.watch(localStorageRepositoryProvider);
+
+  return localStorageRepository.isMovieFavorite(movieId);
+});
+
+//
+
+class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
 
   const _CustomSliverAppBar({required this.movie});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
+
     final size = MediaQuery.of(context).size;
 
     return SliverAppBar(
@@ -209,11 +225,25 @@ class _CustomSliverAppBar extends StatelessWidget {
       expandedHeight: size.height * 0.7,
       foregroundColor: Colors.white,
       actions: [
+        //Este es el boton de favorito para agregar las peliculas
         IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.favorite_border),
-          //icon: const Icon(Icons.favorite_rounded, color: Colors.red),
-        )
+            onPressed: () async {
+              //ref.watch(localStorageRepositoryProvider).toggleFavorite(movie);
+
+              await ref
+                  .read(favoriteMoviesProvider.notifier)
+                  .toggleFavorite(movie);
+
+              //Esto es para invalidar el provider
+              ref.invalidate(isFavoriteProvider(movie.id));
+            },
+            icon: isFavoriteFuture.when(
+              loading: () => const CircularProgressIndicator(strokeWidth: 2),
+              data: (isFavorite) => isFavorite
+                  ? const Icon(Icons.favorite_rounded, color: Colors.red)
+                  : const Icon(Icons.favorite_border),
+              error: (_, __) => throw UnimplementedError(),
+            ))
       ],
       flexibleSpace: FlexibleSpaceBar(
         title: Text(

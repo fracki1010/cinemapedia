@@ -52,7 +52,7 @@ class CustomAppbar extends ConsumerWidget {
                       //no retorna nada
                       if (movie == null) return;
                       //Sino me lleva a la pelicula con el link
-                      context.push('/movie/${movie.id}');
+                      context.push('/home/0/movie/${movie.id}');
                     },
                   );
                 },
