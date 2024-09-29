@@ -13,6 +13,8 @@ class FavoriteView extends ConsumerStatefulWidget {
 }
 
 class FavoriteViewState extends ConsumerState<FavoriteView> {
+  //Todo esto es para hacer un infinite scroll
+
   bool isLastPage = false;
   bool isLoading = false;
 
