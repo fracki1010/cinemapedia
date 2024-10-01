@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/providers.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class MovieScreen extends ConsumerStatefulWidget {
   static const name = 'movie-screen';
@@ -34,9 +35,12 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
     final Movie? movie = ref.watch(movieInfoProvider)[widget.movieId];
 
     if (movie == null) {
-      return const Scaffold(
+      return Scaffold(
         body: Center(
-          child: CircularProgressIndicator(strokeWidth: 2),
+          child: LoadingAnimationWidget.threeRotatingDots(
+            color: Colors.white,
+            size: 80,
+          ),
         ),
       );
     }
@@ -139,7 +143,12 @@ class _ActorsByMovie extends ConsumerWidget {
     final actorsByMovie = ref.watch(actorsByMovieProvider);
 
     if (actorsByMovie[movieId] == null) {
-      return const CircularProgressIndicator(strokeWidth: 2);
+      return Center(
+        child: LoadingAnimationWidget.newtonCradle(
+          color: Colors.white,
+          size: 100,
+        ),
+      );
     }
 
     final actors = actorsByMovie[movieId]!;
