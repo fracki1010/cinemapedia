@@ -97,33 +97,16 @@ class _Slide extends StatelessWidget {
           SizedBox(
             width: 150,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.network(
-                fit: BoxFit.cover,
-                movie.posterPath,
-                width: 150,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress != null) {
-                    return const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Center(
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    );
-                  }
-
-                  return GestureDetector(
-                    //Con este widget se interactua con la img
-
-                    //cambiamos estoy para que la ruta acepte mantener el estado
-                    /*  onTap: () => context.push('/movie/${movie.id}'), */
-
-                    onTap: () => context.push('/home/0/movie/${movie.id}'),
-                    child: FadeIn(child: child),
-                  );
-                },
-              ),
-            ),
+                borderRadius: BorderRadius.circular(20),
+                child: GestureDetector(
+                  onTap: () => context.push('/home/0/movie/${movie.id}'),
+                  child: FadeInImage(
+                      image: NetworkImage(movie.posterPath),
+                      placeholder:
+                          const AssetImage('assets/loaders/loader.gif'),
+                      height: 220,
+                      fit: BoxFit.cover),
+                )),
           ),
           //
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class FullScreenLoader extends StatelessWidget {
   const FullScreenLoader({super.key});
@@ -32,7 +33,8 @@ class FullScreenLoader extends StatelessWidget {
         children: [
           const Text('Espere por favor'),
           const SizedBox(height: 10),
-          const CircularProgressIndicator(strokeWidth: 2),
+          LoadingAnimationWidget.horizontalRotatingDots(
+              color: Colors.white, size: 100),
           const SizedBox(height: 10),
           StreamBuilder(
             stream: getLoadingMessages(),
